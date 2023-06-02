@@ -45,9 +45,10 @@ public class Bot extends TelegramLongPollingBot {
 
             if (update.getMessage().getText().equals("/start")) {
                 keyboardMarkup = createHomeInlineKeyboard();
-                message.setText("Benvenuto su TrasportiMessinaBot. \n" +
+
+                sendKeyboard(chatId, "Benvenuto su TrasportiMessinaBot. \n" +
                         "Per navigare le opzioni del bot, usare il menù.");
-                message.setReplyMarkup(keyboardMarkup);
+                currentView = "home";
             }
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
@@ -80,7 +81,7 @@ public class Bot extends TelegramLongPollingBot {
                     keyboardMarkup = createListaTramInlineKeyboard();
 
                 } else if (callbackData.equals("prossimaFermata")) {
-                    keyboardMarkup = createProssimaFermataTramInlineKeyboard();
+                    //keyboardMarkup = createProssimaFermataTramInlineKeyboard();
 
                 } else if (callbackData.equals("indietro")) {
                     keyboardMarkup = createHomeInlineKeyboard();

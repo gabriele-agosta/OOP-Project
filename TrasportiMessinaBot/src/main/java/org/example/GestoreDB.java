@@ -9,7 +9,6 @@ public class GestoreDB {
         Dotenv dotenv = Dotenv.load();
         this.username = dotenv.get("DATABASE_USERNAME");
         this.password = dotenv.get("DATABASE_PASSWORD");
-        this.url = dotenv.get("DATABASE_URL")
-
+        this.url = dotenv.get("DATABASE_URL");
     }
 }
