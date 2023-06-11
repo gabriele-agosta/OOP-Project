@@ -1,5 +1,5 @@
 package org.example;
- enum GiorniSettimana {
+ enum GiornoSettimana {
     Lunedi,
     Martedi,
     Mercoledi,
@@ -8,7 +8,7 @@ package org.example;
     Sabato,
     Domenica;
 
-    public static GiorniSettimana fromString(String value) {
+    public static GiornoSettimana fromString(String value) {
         if (value != null) {
             switch (value.toLowerCase()) {
                 case "lunedi":

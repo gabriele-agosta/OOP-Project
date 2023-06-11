@@ -6,10 +6,6 @@ public abstract class Trasporto{
     int linea;
     ArrayList<Fermata> fermate;
 
-    public Trasporto(int linea, ArrayList<Fermata> fermate) {
-        this.linea = linea;
-    }
-
     public Trasporto(){}
 
     public int getLinea() {
