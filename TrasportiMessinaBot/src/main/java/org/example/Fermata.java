@@ -56,4 +56,10 @@ public class Fermata {
     public void setCapolinea(boolean capolinea) {
         this.capolinea = capolinea;
     }
+
+    public String getCapolienea() {
+        String valore = !this.capolinea ? "No" : "Si";
+        return valore;
+    }
+
 }

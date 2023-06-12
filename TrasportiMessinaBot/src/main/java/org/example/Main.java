@@ -13,14 +13,9 @@ public class Main {
         GestoreDB gestoreDB = new GestoreDB();
 
         try {
-            Connection connection = DriverManager.getConnection(gestoreDB.url, gestoreDB.username, gestoreDB.password);
-            System.out.println("Connesso al database");
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new Bot());
             System.out.println("Connesso al bot");
-        } catch (SQLException sqle){
-            System.out.println("There was a problem connecting to the database");
-            sqle.printStackTrace();
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }

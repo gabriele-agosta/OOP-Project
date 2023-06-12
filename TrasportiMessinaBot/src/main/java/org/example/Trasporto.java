@@ -13,7 +13,7 @@ public abstract class Trasporto{
     }
 
     public ArrayList<Fermata> getFermate() {
-        return fermate;
+        return this.fermate;
     }
 
     public void setLinea(int linea) {
