@@ -5,7 +5,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.sql.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 
 import static java.lang.Integer.parseInt;
@@ -53,6 +52,7 @@ public class GestoreDB {
         LocalDate currentDate = LocalDate.now();
         DayOfWeek currentDay = currentDate.getDayOfWeek();
         ArrayList<Fermata> fermate = new ArrayList<>();
+
 
         try {
             String query = String.format("SELECT ttf.*, f.indirizzo " +

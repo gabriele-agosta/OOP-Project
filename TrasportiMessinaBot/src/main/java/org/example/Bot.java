@@ -95,7 +95,7 @@ public class Bot extends TelegramLongPollingBot {
             }
             case "listaLineeBus" -> keyboard = createBusListKeyboard();
             case "listaLineeTram" -> keyboard = createTramListKeyboard();
-            case "31", "s3", "28", "29" -> {
+            case "31", "30", "28", "29" -> {
                 keyboard = createQueryChoiceKeyboard();
                 linea = messageText;
             }
@@ -132,12 +132,12 @@ public class Bot extends TelegramLongPollingBot {
             }
             case "listaLineeBus" -> keyboard = createBusListKeyboard();
             case "listaLineeTram" -> keyboard = createTramListKeyboard();
-            case "31", "s3", "28", "29" -> {
+            case "31", "30", "28", "29" -> {
                 keyboard = createQueryChoiceKeyboard();
                 linea = messageText;
             }
             case "listaFermate" -> risultatoQuery = getListaFermate(gestoreDB, linea, tipo);
-            case "prossimaFermataBus", "prossimaFermataTram" -> risultatoQuery = getProssimaFermata(gestoreDB, linea, tipo, currentTime);
+            case "prossimaFermata" -> risultatoQuery = getProssimaFermata(gestoreDB, linea, tipo, currentTime);
             case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB);
         }
     }
@@ -169,8 +169,8 @@ public class Bot extends TelegramLongPollingBot {
         lineButton1.setCallbackData("31");
 
         InlineKeyboardButton lineButton2 = new InlineKeyboardButton();
-        lineButton2.setText("Linea S3");
-        lineButton2.setCallbackData("s3");
+        lineButton2.setText("Linea 30");
+        lineButton2.setCallbackData("30");
 
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(lineButton1);
@@ -277,7 +277,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private String getProssimaFermata(GestoreDB gestoreDB, String linea, String tipo, LocalTime currentTime) {
-        Trasporto trasporto = gestoreDB.getListaFermate(linea, tipo);
+        Trasporto trasporto = gestoreDB.getProssimaFermata(linea, tipo);
 
         InlineKeyboardButton backButton = new InlineKeyboardButton();
         backButton.setText("⬅️ Indietro");
@@ -323,7 +323,7 @@ public class Bot extends TelegramLongPollingBot {
                 return "Seleziona la linea del tram";
             case "listaLineeBus": case "listaLineeTram":
                 return "Seleziona l'operazione da effettuare";
-            case "31", "s3", "28", "29":
+            case "31", "30", "28", "29":
                 return "Seleziona una linea";
             case "listaFermate", "prossimaFermata":
                 return risultatoQuery;
