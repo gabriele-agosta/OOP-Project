@@ -1,5 +1,6 @@
 package org.example;
- enum GiornoSettimana {
+
+enum GiornoSettimana {
     Lunedi,
     Martedi,
     Mercoledi,
@@ -11,19 +12,19 @@ package org.example;
     public static GiornoSettimana fromString(String value) {
         if (value != null) {
             switch (value.toLowerCase()) {
-                case "lunedi":
+                case "lunedi", "monday":
                     return Lunedi;
-                case "martedi":
+                case "martedi", "tuesday":
                     return Martedi;
-                case "mercoledi":
+                case "mercoledi", "wednesday":
                     return Mercoledi;
-                case "giovedi":
+                case "giovedi", "thursday":
                     return Giovedi;
-                case "venerdi":
+                case "venerdi", "friday":
                     return Venerdi;
-                case "sabato":
+                case "sabato", "saturday":
                     return Sabato;
-                case "domenica":
+                case "domenica", "sunday":
                     return Domenica;
             }
         }

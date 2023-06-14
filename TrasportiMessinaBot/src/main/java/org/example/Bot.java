@@ -22,12 +22,14 @@ public class Bot extends TelegramLongPollingBot {
     private InlineKeyboardMarkup keyboard;
     private ArrayList<String> stackViews;
     String linea, tipo;
+    int fermata;
 
     public Bot() {
         this.keyboard = new InlineKeyboardMarkup();
         this.stackViews = new ArrayList<String>();
         this.linea = null;
         this.tipo = null;
+        this.fermata = 0;
     }
 
 
@@ -111,6 +113,16 @@ public class Bot extends TelegramLongPollingBot {
                     risultatoQuery = "Non ci sono altre fermate per oggi";
                 }
             }
+            case "prossimoTrasporto" -> {
+                keyboard = createAddressesListKeyboard();
+            }
+            case "1", "2", "3" -> {
+                fermata = Integer.parseInt(messageText);
+                risultatoQuery = getProssimoTrasporto(gestoreDB, fermata);
+                if (risultatoQuery.isEmpty()){
+                    risultatoQuery = "Questa fermata non è attualmente coperta";
+                }
+            }
             case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB);
         }
 
@@ -138,6 +150,9 @@ public class Bot extends TelegramLongPollingBot {
             }
             case "listaFermate" -> risultatoQuery = getListaFermate(gestoreDB, linea, tipo);
             case "prossimaFermata" -> risultatoQuery = getProssimaFermata(gestoreDB, linea, tipo, currentTime);
+            case "prossimoTrasporto" -> {
+                keyboard = createAddressesListKeyboard();
+            }
             case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB);
         }
     }
@@ -155,8 +170,16 @@ public class Bot extends TelegramLongPollingBot {
         row.add(busButton);
         row.add(tramButton);
 
+        InlineKeyboardButton prossimoTrasportoButton = new InlineKeyboardButton();
+        prossimoTrasportoButton.setText("Prossimo trasporto di una fermata");
+        prossimoTrasportoButton.setCallbackData("prossimoTrasporto");
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(prossimoTrasportoButton);
+
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         rowsInline.add(row);
+        rowsInline.add(row2);
 
         this.keyboard.setKeyboard(rowsInline);
 
@@ -215,6 +238,44 @@ public class Bot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         rowsInline.add(row1);
         rowsInline.add(row2);
+
+        this.keyboard.setKeyboard(rowsInline);
+
+        return this.keyboard;
+    }
+
+    private InlineKeyboardMarkup createAddressesListKeyboard() {
+        InlineKeyboardButton lineButton1 = new InlineKeyboardButton();
+        lineButton1.setText("Viale Ferdinando Stagno d'Alcontres");
+        lineButton1.setCallbackData("1");
+
+        InlineKeyboardButton lineButton2 = new InlineKeyboardButton();
+        lineButton2.setText("Via Garibaldi");
+        lineButton2.setCallbackData("2");
+
+        InlineKeyboardButton lineButton3 = new InlineKeyboardButton();
+        lineButton3.setText("Viale Giostra");
+        lineButton3.setCallbackData("3");
+
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        row1.add(lineButton1);
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(lineButton2);
+        row2.add(lineButton3);
+
+
+        InlineKeyboardButton indietroButton = new InlineKeyboardButton();
+        indietroButton.setText("⬅️ Indietro");
+        indietroButton.setCallbackData("indietro");
+
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(indietroButton);
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        rowsInline.add(row1);
+        rowsInline.add(row2);
+        rowsInline.add(row3);
 
         this.keyboard.setKeyboard(rowsInline);
 
@@ -307,6 +368,35 @@ public class Bot extends TelegramLongPollingBot {
         return risposta.toString();
     }
 
+    private String getProssimoTrasporto(GestoreDB gestoreDB, int idFermata){
+        Trasporto trasporto = gestoreDB.getProssimoTrasporto(idFermata);
+        StringBuilder risposta = new StringBuilder();
+
+        InlineKeyboardButton backButton = new InlineKeyboardButton();
+        backButton.setText("⬅️ Indietro");
+        backButton.setCallbackData("indietro");
+
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(backButton);
+        rowsInline.add(rowInline);
+        keyboard.setKeyboard(rowsInline);
+
+        if (trasporto != null) {
+            ArrayList<Fermata> fermate = trasporto.getFermate();
+            Fermata f = fermate.get(0);
+
+            risposta.append("Linea: ").append(trasporto.linea).append("\n")
+                    .append("Orario: ").append(f.getOrario()).append("\n")
+                    .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
+                    .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
+                    .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
+                    .append("Capolinea: ").append(f.getCapolienea()).append("\n\n");
+        }
+
+        return risposta.toString();
+    }
+
     private void getPreviousKeyboard(String risultatoQuery, GestoreDB gestoreDB) {
         stackViews.remove(stackViews.size() - 1);
         handleKeyboard(this.stackViews.get(stackViews.size() - 1), gestoreDB, risultatoQuery);
@@ -325,7 +415,9 @@ public class Bot extends TelegramLongPollingBot {
                 return "Seleziona l'operazione da effettuare";
             case "31", "30", "28", "29":
                 return "Seleziona una linea";
-            case "listaFermate", "prossimaFermata":
+            case "prossimoTrasporto":
+                return "Seleziona la fermata";
+            case "listaFermate", "prossimaFermata", "1", "2", "3":
                 return risultatoQuery;
         }
         return "";
