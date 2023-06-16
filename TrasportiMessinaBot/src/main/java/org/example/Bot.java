@@ -13,20 +13,20 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Time;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class Bot extends TelegramLongPollingBot {
     private InlineKeyboardMarkup keyboard;
-    private ArrayList<String> stackViews;
-    String linea, tipo;
-    int fermata;
+    private ConcurrentHashMap<Long, Stack<String>> userStackViewsMap;
+    private String linea, tipo;
+    private int fermata;
 
     public Bot() {
         this.keyboard = new InlineKeyboardMarkup();
-        this.stackViews = new ArrayList<String>();
+        this.userStackViewsMap = new ConcurrentHashMap<>();
         this.linea = null;
         this.tipo = null;
         this.fermata = 0;
@@ -59,7 +59,6 @@ public class Bot extends TelegramLongPollingBot {
             }
         });
         userThread.start();
-
     }
 
     private void handleMessage(long chatId, String messageText) {
@@ -69,24 +68,28 @@ public class Bot extends TelegramLongPollingBot {
 
         message.setChatId(chatId);
 
-        risultatoQuery = handleKeyboard(messageText, gestoreDB);
+        Stack<String> stackViews = userStackViewsMap.get(chatId);
+        if (stackViews == null) {
+            stackViews = new Stack<>();
+            stackViews.add("home");
+            userStackViewsMap.put(chatId, stackViews);
+        }
 
         if (!messageText.equals("indietro") && !messageText.equals("/start")) {
             stackViews.add(messageText);
         }
-        if (messageText.equals("/start")) {
-            stackViews.add("home");
-        }
 
-        sendKeyboard(chatId, getMessageToSend(stackViews.get(stackViews.size() - 1), risultatoQuery));
+        risultatoQuery = handleKeyboard(messageText, gestoreDB, userStackViewsMap.get(chatId));
+
+        sendKeyboard(chatId, getMessageToSend(userStackViewsMap.get(chatId).peek(), risultatoQuery));
     }
 
-    private String handleKeyboard(String messageText, GestoreDB gestoreDB){
+    private String handleKeyboard(String messageText, GestoreDB gestoreDB, Stack<String> stackViews){
         String risultatoQuery = null;
         LocalTime currentTime = LocalTime.now();
 
         switch (messageText) {
-            case "/start", "/home" -> keyboard = createHomeKeyboard();
+            case "/start", "home" -> keyboard = createHomeKeyboard();
             case "bus" -> {
                 keyboard = createBusListKeyboard();
                 tipo = messageText;
@@ -123,13 +126,13 @@ public class Bot extends TelegramLongPollingBot {
                     risultatoQuery = "Questa fermata non è attualmente coperta";
                 }
             }
-            case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB);
+            case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB, stackViews);
         }
 
         return risultatoQuery;
     }
 
-    private void handleKeyboard(String messageText, GestoreDB gestoreDB, String risultatoQuery){
+    private void handleKeyboard(String messageText, GestoreDB gestoreDB, String risultatoQuery, Stack<String> stackViews){
         LocalTime currentTime = LocalTime.now();
 
         switch (messageText) {
@@ -153,7 +156,7 @@ public class Bot extends TelegramLongPollingBot {
             case "prossimoTrasporto" -> {
                 keyboard = createAddressesListKeyboard();
             }
-            case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB);
+            case "indietro" -> getPreviousKeyboard(risultatoQuery, gestoreDB, stackViews);
         }
     }
 
@@ -397,9 +400,12 @@ public class Bot extends TelegramLongPollingBot {
         return risposta.toString();
     }
 
-    private void getPreviousKeyboard(String risultatoQuery, GestoreDB gestoreDB) {
-        stackViews.remove(stackViews.size() - 1);
-        handleKeyboard(this.stackViews.get(stackViews.size() - 1), gestoreDB, risultatoQuery);
+    private void getPreviousKeyboard(String risultatoQuery, GestoreDB gestoreDB, Stack<String> stackViews) {
+        stackViews.pop();
+
+        String previousView = stackViews.isEmpty() ? "home" : stackViews.peek();
+
+        handleKeyboard(previousView, gestoreDB, risultatoQuery, stackViews);
     }
 
     private String getMessageToSend(String currentView, String risultatoQuery) {
