@@ -11,11 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
-import java.sql.Time;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 
 public class Bot extends TelegramLongPollingBot {
@@ -335,7 +333,7 @@ public class Bot extends TelegramLongPollingBot {
                     .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
                     .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
                     .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
-                    .append("Capolinea: ").append(f.getCapolienea()).append("\n\n");
+                    .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
         }
         return risposta.toString();
     }
@@ -363,7 +361,7 @@ public class Bot extends TelegramLongPollingBot {
                         .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
                         .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
                         .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
-                        .append("Capolinea: ").append(f.getCapolienea()).append("\n\n");
+                        .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
                 break;
             }
         }
@@ -394,7 +392,7 @@ public class Bot extends TelegramLongPollingBot {
                     .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
                     .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
                     .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
-                    .append("Capolinea: ").append(f.getCapolienea()).append("\n\n");
+                    .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
         }
 
         return risposta.toString();

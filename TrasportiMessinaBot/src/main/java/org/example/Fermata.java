@@ -49,7 +49,7 @@ public class Fermata {
         this.idFermata = idFermata;
     }
 
-    public boolean isCapolinea() {
+    public boolean getCapolinea() {
         return capolinea;
     }
 
@@ -57,7 +57,7 @@ public class Fermata {
         this.capolinea = capolinea;
     }
 
-    public String getCapolienea() {
+    public String convertCapolinea() {
         String valore = !this.capolinea ? "No" : "Si";
         return valore;
     }
