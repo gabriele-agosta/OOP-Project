@@ -288,24 +288,27 @@ public class Bot extends TelegramLongPollingBot {
         listaLineeButton.setText("Lista fermate");
         listaLineeButton.setCallbackData("listaFermate");
 
-        InlineKeyboardButton prossimaFermataButton = new InlineKeyboardButton();
-        prossimaFermataButton.setText("Prossima fermata");
-        prossimaFermataButton.setCallbackData("prossimaFermata");
-
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         row1.add(listaLineeButton);
-        row1.add(prossimaFermataButton);
+
+        InlineKeyboardButton prossimaFermataButton = new InlineKeyboardButton();
+        prossimaFermataButton.setText("Prossima fermata di oggi");
+        prossimaFermataButton.setCallbackData("prossimaFermata");
+
+        List<InlineKeyboardButton> row2 = new ArrayList<>();
+        row2.add(prossimaFermataButton);
 
         InlineKeyboardButton indietroButton = new InlineKeyboardButton();
         indietroButton.setText("⬅️ Indietro");
         indietroButton.setCallbackData("indietro");
 
-        List<InlineKeyboardButton> row2 = new ArrayList<>();
-        row2.add(indietroButton);
+        List<InlineKeyboardButton> row3 = new ArrayList<>();
+        row3.add(indietroButton);
 
         List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
         rowsInline.add(row1);
         rowsInline.add(row2);
+        rowsInline.add(row3);
 
         this.keyboard.setKeyboard(rowsInline);
 
@@ -327,7 +330,7 @@ public class Bot extends TelegramLongPollingBot {
 
         StringBuilder risposta = new StringBuilder();
 
-        for (Fermata f : trasporto.fermate) {
+        for (Fermata f : trasporto.getFermate()) {
             risposta.append("Linea: ").append(linea).append("\n")
                     .append("Orario: ").append(f.getOrario()).append("\n")
                     .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
@@ -354,7 +357,7 @@ public class Bot extends TelegramLongPollingBot {
         StringBuilder risposta = new StringBuilder();
 
 
-        for (Fermata f : trasporto.fermate) {
+        for (Fermata f : trasporto.getFermate()) {
             if (f.getOrario().toLocalTime().isAfter(currentTime)) {
                 risposta.append("Linea: ").append(linea).append("\n")
                         .append("Orario: ").append(f.getOrario()).append("\n")
@@ -387,7 +390,7 @@ public class Bot extends TelegramLongPollingBot {
             ArrayList<Fermata> fermate = trasporto.getFermate();
             Fermata f = fermate.get(0);
 
-            risposta.append("Linea: ").append(trasporto.linea).append("\n")
+            risposta.append("Linea: ").append(trasporto.getLinea()).append("\n")
                     .append("Orario: ").append(f.getOrario()).append("\n")
                     .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
                     .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")

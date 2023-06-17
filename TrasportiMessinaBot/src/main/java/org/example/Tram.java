@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Tram extends Trasporto{
 
     public Tram(int linea, ArrayList<Fermata> fermate) {
-        this.linea = linea;
-        this.fermate = fermate;
+        super(linea, fermate);
     }
 }

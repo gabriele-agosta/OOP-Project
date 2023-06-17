@@ -3,11 +3,11 @@ package org.example;
 import java.sql.Time;
 
 public class Fermata {
-    Time orario;
-    String indirizzo;
-    GiornoSettimana giornoSettimana;
-    int idFermata;
-    boolean capolinea;
+    private Time orario;
+    private String indirizzo;
+    private GiornoSettimana giornoSettimana;
+    private int idFermata;
+    private boolean capolinea;
 
     public Fermata(Time orario, String indirizzo, GiornoSettimana giornoSettimana, int idFermata, boolean capolinea) {
         this.orario = orario;

@@ -3,10 +3,13 @@ package org.example;
 import java.util.ArrayList;
 
 public abstract class Trasporto{
-    int linea;
-    ArrayList<Fermata> fermate;
+    private int linea;
+    private ArrayList<Fermata> fermate;
 
-    public Trasporto(){}
+    public Trasporto(int linea, ArrayList<Fermata> fermate){
+        setLinea(linea);
+        setFermate(fermate);
+    }
 
     public int getLinea() {
         return linea;
