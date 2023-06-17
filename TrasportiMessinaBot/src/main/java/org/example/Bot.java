@@ -420,7 +420,7 @@ public class Bot extends TelegramLongPollingBot {
             case "listaLineeBus": case "listaLineeTram":
                 return "Seleziona l'operazione da effettuare";
             case "31", "30", "28", "29":
-                return "Seleziona una linea";
+                return "Seleziona un'operazione";
             case "prossimoTrasporto":
                 return "Seleziona la fermata";
             case "listaFermate", "prossimaFermata", "1", "2", "3":
