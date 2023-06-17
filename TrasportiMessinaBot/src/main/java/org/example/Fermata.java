@@ -21,7 +21,7 @@ public class Fermata {
         return orario;
     }
 
-    public void setOrario(Time orario) {
+    private void setOrario(Time orario) {
         this.orario = orario;
     }
 
@@ -29,7 +29,7 @@ public class Fermata {
         return indirizzo;
     }
 
-    public void setIndirizzo(String indirizzo) {
+    private void setIndirizzo(String indirizzo) {
         this.indirizzo = indirizzo;
     }
 
@@ -37,7 +37,7 @@ public class Fermata {
         return giornoSettimana;
     }
 
-    public void setGiornoSettimana(GiornoSettimana giornoSettimana) {
+    private void setGiornoSettimana(GiornoSettimana giornoSettimana) {
         this.giornoSettimana = giornoSettimana;
     }
 
@@ -45,7 +45,7 @@ public class Fermata {
         return idFermata;
     }
 
-    public void setIdFermata(int idFermata) {
+    private void setIdFermata(int idFermata) {
         this.idFermata = idFermata;
     }
 
@@ -53,7 +53,7 @@ public class Fermata {
         return capolinea;
     }
 
-    public void setCapolinea(boolean capolinea) {
+    private void setCapolinea(boolean capolinea) {
         this.capolinea = capolinea;
     }
 

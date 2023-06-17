@@ -19,11 +19,11 @@ public abstract class Trasporto{
         return this.fermate;
     }
 
-    public void setLinea(int linea) {
+    private void setLinea(int linea) {
         this.linea = linea;
     }
 
-    public void setFermate(ArrayList<Fermata> fermate) {
+    private void setFermate(ArrayList<Fermata> fermate) {
         this.fermate = fermate;
     }
 }
