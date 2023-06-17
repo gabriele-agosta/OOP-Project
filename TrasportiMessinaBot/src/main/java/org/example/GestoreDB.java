@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import static java.lang.Integer.parseInt;
 
 public class GestoreDB {
-    String username, password, url;
-    Connection connection;
+    private String username, password, url;
+    private Connection connection;
 
     public GestoreDB(){
         Dotenv dotenv = Dotenv.load();
