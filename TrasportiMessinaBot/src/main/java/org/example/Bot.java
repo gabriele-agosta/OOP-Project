@@ -331,12 +331,7 @@ public class Bot extends TelegramLongPollingBot {
         StringBuilder risposta = new StringBuilder();
 
         for (Fermata f : trasporto.getFermate()) {
-            risposta.append("Linea: ").append(linea).append("\n")
-                    .append("Orario: ").append(f.getOrario()).append("\n")
-                    .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
-                    .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
-                    .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
-                    .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
+            buildResult(linea, risposta, f);
         }
         return risposta.toString();
     }
@@ -359,17 +354,21 @@ public class Bot extends TelegramLongPollingBot {
 
         for (Fermata f : trasporto.getFermate()) {
             if (f.getOrario().toLocalTime().isAfter(currentTime)) {
-                risposta.append("Linea: ").append(linea).append("\n")
-                        .append("Orario: ").append(f.getOrario()).append("\n")
-                        .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
-                        .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
-                        .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
-                        .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
+                buildResult(linea, risposta, f);
                 break;
             }
         }
 
         return risposta.toString();
+    }
+
+    private void buildResult(String linea, StringBuilder risposta, Fermata f) {
+        risposta.append("Linea: ").append(linea).append("\n")
+                .append("Orario: ").append(f.getOrario()).append("\n")
+                .append("Giorno: ").append(f.getGiornoSettimana()).append("\n")
+                .append("Indirizzo: ").append(f.getIndirizzo()).append("\n")
+                .append("Id Fermata: ").append(f.getIdFermata()).append("\n")
+                .append("Capolinea: ").append(f.convertCapolinea()).append("\n\n");
     }
 
     private String getProssimoTrasporto(GestoreDB gestoreDB, int idFermata){
